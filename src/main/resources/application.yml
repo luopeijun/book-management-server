@@ -9,6 +9,11 @@ spring:
       driver-class-name: com.mysql.cj.jdbc.Driver
       username: root
       password: password
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+server:
+  port: 8081
 
 
 

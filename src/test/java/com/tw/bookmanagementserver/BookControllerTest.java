@@ -29,7 +29,7 @@ class BookControllerTest {
     @Test
     void should_return_created_when_add_book() {
         final Book book = Book.builder().title("new book").author("new author").year(2024).isbn("0000").build();
-        final ResponseEntity<Book> responseEntity = restTemplate.postForEntity("/task", book, Book.class);
+        final ResponseEntity<Book> responseEntity = restTemplate.postForEntity("/books", book, Book.class);
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         assertThat(responseEntity.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON);

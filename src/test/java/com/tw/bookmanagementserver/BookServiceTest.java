@@ -27,6 +27,7 @@ class BookServiceTest {
         when(bookRepository.findAll()).thenReturn(emptyList());
         final List<Book> allBooks = bookService.getAllBooks();
         assertThat(allBooks).isEmpty();
+        verify(bookRepository).findAll();
     }
 
     @Test

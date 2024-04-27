@@ -11,11 +11,9 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
-
-@SpringBootTest(webEnvironment =  SpringBootTest.WebEnvironment.RANDOM_PORT)
-class BookControllerTest  {
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+class BookControllerTest {
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -26,6 +24,22 @@ class BookControllerTest  {
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON);
         assertThat(responseEntity.getBody()).isEmpty();
+    }
+
+    @Test
+    void should_return_created_when_add_book() {
+        final Book book = Book.builder().title("new book").author("new author").year(2024).isbn("0000").build();
+        final ResponseEntity<Book> responseEntity = restTemplate.postForEntity("/task", book, Book.class);
+
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(responseEntity.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON);
+        final Book createdBook = responseEntity.getBody();
+        assertThat(createdBook).isNotNull();
+        assertThat(createdBook.getId()).isPositive();
+        assertThat(createdBook.getTitle()).isEqualTo(book.getTitle());
+        assertThat(createdBook.getAuthor()).isEqualTo(book.getAuthor());
+        assertThat(createdBook.getYear()).isEqualTo(book.getYear());
+        assertThat(createdBook.getIsbn()).isEqualTo(book.getIsbn());
     }
 
 }

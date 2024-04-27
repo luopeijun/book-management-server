@@ -41,4 +41,14 @@ class BookServiceTest {
         assertThat(bookService.getAllBooks()).isEqualTo(books);
         verify(bookRepository).findAll();
     }
+
+    @Test
+    void should_return_created_book_when_create_book() {
+        final Book book = Book.builder().title("new book").author("new author").year(2024).isbn("0000").build();
+        final Book savedBook = Book.builder().id(1L).title("new book").author("new author").year(2024).isbn("0000").build();
+        when(bookRepository.save(book)).thenReturn(savedBook);
+        final Book createdBook = bookService.createBook(book);
+        assertThat(createdBook).isEqualTo(savedBook);
+        verify(bookRepository).save(book);
+    }
 }

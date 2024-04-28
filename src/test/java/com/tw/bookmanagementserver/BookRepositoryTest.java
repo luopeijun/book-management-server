@@ -75,6 +75,24 @@ class BookRepositoryTest {
         assertFalse(foundBook.isPresent());
     }
 
+    @Test
+    void should_update_book_when_book_exists() {
+        Book book = buildBook();
+        entityManager.persist(book);
+
+        book.setTitle("update title");
+        book.setAuthor("update author");
+        book.setYear(2000);
+        book.setIsbn("1111");
+
+        Book updatedBook = bookRepository.save(book);
+
+        assertThat(updatedBook.getTitle()).isEqualTo("update title");
+        assertThat(updatedBook.getAuthor()).isEqualTo("update author");
+        assertThat(updatedBook.getYear()).isEqualTo(2000);
+        assertThat(updatedBook.getIsbn()).isEqualTo("1111");
+    }
+
     private static Book buildBook() {
         return Book.builder().title("new book").author("new author").year(2024).isbn("0000").build();
     }

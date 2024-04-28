@@ -67,14 +67,35 @@ class BookServiceTest {
         verify(bookRepository).findById(book.getId());
     }
 
-        @Test
-        void should_throw_exceptions_when_id_not_exist() {
-            when(bookRepository.findById(123L)).thenReturn(Optional.empty());
-            BusinessException thrownException = assertThrows(BusinessException.class, () -> {
-                bookService.getBookById(123L);
-            });
-            assertThat(thrownException.getMessage()).isEqualTo("Not found book id 123");
-        }
+    @Test
+    void should_throw_exceptions_when_id_not_exist() {
+        when(bookRepository.findById(123L)).thenReturn(Optional.empty());
+        BusinessException thrownException = assertThrows(BusinessException.class, () -> {
+            bookService.getBookById(123L);
+        });
+        assertThat(thrownException.getMessage()).isEqualTo("Not found book id 123");
+    }
+
+    @Test
+    void should_update_book_when_book_exists() {
+        Book book = buildBook();
+        Book updatedBook = Book.builder().id(book.getId()).title("update").author("update author").year(2000).isbn("1111").build();
+
+        book.setTitle("update title");
+        book.setAuthor("update author");
+        book.setYear(2000);
+        book.setIsbn("1111");
+
+        when(bookRepository.findById(book.getId())).thenReturn(Optional.ofNullable(book));
+        when(bookRepository.save(book)).thenReturn(updatedBook);
+        Book result = bookService.updateBookDetails(book.getId(), updatedBook);
+
+        assertThat(result).isNotNull();
+        assertThat(updatedBook.getTitle()).isEqualTo(updatedBook.getTitle());
+        assertThat(updatedBook.getAuthor()).isEqualTo(updatedBook.getAuthor());
+        assertThat(updatedBook.getYear()).isEqualTo(updatedBook.getYear());
+        assertThat(updatedBook.getIsbn()).isEqualTo(updatedBook.getIsbn());
+    }
 
     private static Book buildBook() {
         return Book.builder().title("new book").author("new author").year(2024).isbn("0000").build();

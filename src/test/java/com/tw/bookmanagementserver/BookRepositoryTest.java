@@ -13,6 +13,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -66,6 +67,12 @@ class BookRepositoryTest {
         final Optional<Book> foundBook = bookRepository.findById(book.getId());
         assertTrue(foundBook.isPresent());
         assertEquals(book, foundBook.get());
+    }
+
+    @Test
+    void should_throw_exceptions_when_id_not_exist() {
+        final Optional<Book> foundBook = bookRepository.findById(123L);
+        assertFalse(foundBook.isPresent());
     }
 
     private static Book buildBook() {

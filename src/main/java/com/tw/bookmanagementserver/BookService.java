@@ -21,6 +21,6 @@ public class BookService {
     }
 
     public Book getBookById(Long id) {
-        return bookRepository.findById(id).orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND));
+        return bookRepository.findById(id).orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND.getCode(), "Not found book id " + id));
     }
 }

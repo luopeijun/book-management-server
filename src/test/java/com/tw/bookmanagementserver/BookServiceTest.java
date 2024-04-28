@@ -1,5 +1,6 @@
 package com.tw.bookmanagementserver;
 
+import com.tw.bookmanagementserver.exception.BusinessException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -11,6 +12,7 @@ import java.util.Optional;
 
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
@@ -64,6 +66,15 @@ class BookServiceTest {
         assertThat(foundBook).isEqualTo(book);
         verify(bookRepository).findById(book.getId());
     }
+
+        @Test
+        void should_throw_exceptions_when_id_not_exist() {
+            when(bookRepository.findById(123L)).thenReturn(Optional.empty());
+            BusinessException thrownException = assertThrows(BusinessException.class, () -> {
+                bookService.getBookById(123L);
+            });
+            assertThat(thrownException.getMessage()).isEqualTo("Not found book id 123");
+        }
 
     private static Book buildBook() {
         return Book.builder().title("new book").author("new author").year(2024).isbn("0000").build();

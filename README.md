@@ -2,8 +2,8 @@
 
 ## Technology Stack
 * Java
-- Spring Boot
-- MySql
+* Spring Boot
+* MySql
 
 ## Project Setup
 
@@ -16,7 +16,6 @@ stop database
 ```sh
 docker-compose down
 ```
-
 
 ## Build and Run
 Provide the steps to build and run the project.

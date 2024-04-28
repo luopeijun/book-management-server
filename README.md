@@ -25,3 +25,6 @@ Provide the steps to build and run the project.
 ./gradlew clean
 ./gradlew bootRun
 ```
+
+## Server Address
+http://54.252.252.49:8081

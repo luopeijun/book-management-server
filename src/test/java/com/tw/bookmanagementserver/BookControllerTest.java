@@ -1,5 +1,6 @@
 package com.tw.bookmanagementserver;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,6 +19,13 @@ class BookControllerTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
+    @Autowired
+    private BookRepository bookRepository;
+
+    @BeforeEach
+    void setup() {
+        bookRepository.deleteAll();
+    }
     @Test
     void should_return_empty_book_list() {
         final ResponseEntity<List> responseEntity = restTemplate.getForEntity("/books", List.class);
@@ -33,13 +41,31 @@ class BookControllerTest {
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         assertThat(responseEntity.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON);
-        final Book createdBook = responseEntity.getBody();
-        assertThat(createdBook).isNotNull();
-        assertThat(createdBook.getId()).isPositive();
-        assertThat(createdBook.getTitle()).isEqualTo(book.getTitle());
-        assertThat(createdBook.getAuthor()).isEqualTo(book.getAuthor());
-        assertThat(createdBook.getYear()).isEqualTo(book.getYear());
-        assertThat(createdBook.getIsbn()).isEqualTo(book.getIsbn());
+        final Book resBook = responseEntity.getBody();
+        assertThat(resBook).isNotNull();
+        assertThat(resBook.getId()).isPositive();
+        assertThat(resBook.getTitle()).isEqualTo(book.getTitle());
+        assertThat(resBook.getAuthor()).isEqualTo(book.getAuthor());
+        assertThat(resBook.getYear()).isEqualTo(book.getYear());
+        assertThat(resBook.getIsbn()).isEqualTo(book.getIsbn());
     }
+
+    @Test
+    void should_return_book_when_id_exists() {
+        final Long id = 1L;
+        final Book book = Book.builder().id(1L).title("new book").author("new author").year(2024).isbn("0000").build();
+        bookRepository.save(book);
+        final ResponseEntity<Book> responseEntity = restTemplate.getForEntity("/books".concat("/").concat(id.toString()), Book.class);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON);
+        final Book resBook = responseEntity.getBody();
+        assertThat(resBook).isNotNull();
+        assertThat(resBook.getId()).isEqualTo(book.getId());
+        assertThat(resBook.getTitle()).isEqualTo(book.getTitle());
+        assertThat(resBook.getAuthor()).isEqualTo(book.getAuthor());
+        assertThat(resBook.getYear()).isEqualTo(book.getYear());
+        assertThat(resBook.getIsbn()).isEqualTo(book.getIsbn());
+    }
+
 
 }

@@ -1,5 +1,7 @@
-package com.tw.bookmanagementserver;
+package com.tw.bookmanagementserver.controllers;
 
+import com.tw.bookmanagementserver.models.Book;
+import com.tw.bookmanagementserver.services.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;

@@ -1,5 +1,7 @@
 package com.tw.bookmanagementserver;
 
+import com.tw.bookmanagementserver.models.Book;
+import com.tw.bookmanagementserver.repositories.BookRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

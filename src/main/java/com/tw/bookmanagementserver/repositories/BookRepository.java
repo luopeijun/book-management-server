@@ -1,5 +1,6 @@
-package com.tw.bookmanagementserver;
+package com.tw.bookmanagementserver.repositories;
 
+import com.tw.bookmanagementserver.models.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

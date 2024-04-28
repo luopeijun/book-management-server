@@ -1,7 +1,9 @@
-package com.tw.bookmanagementserver;
+package com.tw.bookmanagementserver.services;
 
-import com.tw.bookmanagementserver.exception.BusinessException;
-import com.tw.bookmanagementserver.exception.ErrorCode;
+import com.tw.bookmanagementserver.common.exception.BusinessException;
+import com.tw.bookmanagementserver.common.exception.ErrorCode;
+import com.tw.bookmanagementserver.models.Book;
+import com.tw.bookmanagementserver.repositories.BookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

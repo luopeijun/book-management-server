@@ -1,4 +1,4 @@
-package com.tw.bookmanagementserver.exception;
+package com.tw.bookmanagementserver.common.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

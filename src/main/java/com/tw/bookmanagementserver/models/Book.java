@@ -1,4 +1,4 @@
-package com.tw.bookmanagementserver;
+package com.tw.bookmanagementserver.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

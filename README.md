@@ -23,9 +23,5 @@ Provide the steps to build and run the project.
 1. Build the project using Gradle:
 ```shell
 ./gradlew clean
-./gradlew build
-```
-2. Run the project:
-```sh
-java -jar build/libs/book-management-server.jar
+./gradlew bootRun
 ```

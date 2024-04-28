@@ -127,12 +127,13 @@ class BookControllerTest {
     }
 
     @Test
-    void should_delete_book_when_id_exists() {
+    void should_delete_book() {
         final Book book = buildBook();
         bookRepository.save(book);
         String url = "/books/" + book.getId();
         ResponseEntity<Void> response = restTemplate.exchange(url, HttpMethod.DELETE, null, Void.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+        assertThat(bookRepository.findById(book.getId())).isEmpty();
     }
 
     private static Book buildBook() {

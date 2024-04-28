@@ -33,4 +33,8 @@ public class BookService {
         existingBook.setIsbn(updatedBook.getIsbn());
         return bookRepository.save(existingBook);
     }
+
+    public void deleteBook(Long id) {
+        bookRepository.deleteById(id);
+    }
 }

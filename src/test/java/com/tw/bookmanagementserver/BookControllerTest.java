@@ -36,7 +36,7 @@ class BookControllerTest {
 
     @Test
     void should_return_created_when_add_book() {
-        final Book book = Book.builder().title("new book").author("new author").year(2024).isbn("0000").build();
+        final Book book = buildBook();
         final ResponseEntity<Book> responseEntity = restTemplate.postForEntity("/books", book, Book.class);
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
@@ -52,10 +52,11 @@ class BookControllerTest {
 
     @Test
     void should_return_book_when_id_exists() {
-        final Long id = 1L;
-        final Book book = Book.builder().id(1L).title("new book").author("new author").year(2024).isbn("0000").build();
+        final Book book = buildBook();
         bookRepository.save(book);
-        final ResponseEntity<Book> responseEntity = restTemplate.getForEntity("/books".concat("/").concat(id.toString()), Book.class);
+        System.out.println(bookRepository.findAll());
+        ResponseEntity<Book> responseEntity = restTemplate.getForEntity("/books/{id}", Book.class, book.getId());
+
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON);
         final Book resBook = responseEntity.getBody();
@@ -65,6 +66,10 @@ class BookControllerTest {
         assertThat(resBook.getAuthor()).isEqualTo(book.getAuthor());
         assertThat(resBook.getYear()).isEqualTo(book.getYear());
         assertThat(resBook.getIsbn()).isEqualTo(book.getIsbn());
+    }
+
+    private static Book buildBook() {
+        return Book.builder().title("new book").author("new author").year(2024).isbn("0000").build();
     }
 
 

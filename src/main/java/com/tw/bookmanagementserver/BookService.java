@@ -23,4 +23,14 @@ public class BookService {
     public Book getBookById(Long id) {
         return bookRepository.findById(id).orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND.getCode(), "Not found book id " + id));
     }
+
+    public Book updateBookDetails(Long id, Book updatedBook) {
+        Book existingBook = bookRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND.getCode(), "Not found book id " + id));
+        existingBook.setTitle(updatedBook.getTitle());
+        existingBook.setAuthor(updatedBook.getAuthor());
+        existingBook.setYear(updatedBook.getYear());
+        existingBook.setIsbn(updatedBook.getIsbn());
+        return bookRepository.save(existingBook);
+    }
 }

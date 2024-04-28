@@ -7,6 +7,8 @@ import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -92,6 +94,33 @@ class BookControllerTest {
     @Test
     void should_throw_exceptions_when_id_not_exist() {
         ResponseEntity<Book> responseEntity = restTemplate.getForEntity("/books/{id}", Book.class, 123L);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(responseEntity.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON);
+    }
+
+    @Test
+    void should_update_book_when_id_exist() {
+        final Book book = buildBook();
+        bookRepository.save(book);
+        Book updatedBook = Book.builder().id(book.getId()).title("update").author("update author").year(2000).isbn("1111").build();
+        HttpEntity<Book> requestEntity = new HttpEntity<>(updatedBook);
+        String url = "/books/" + book.getId();
+        ResponseEntity<Book> responseEntity = restTemplate.exchange(url, HttpMethod.PUT, requestEntity, Book.class);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        final Book fetchedBook = responseEntity.getBody();
+        assertThat(fetchedBook).isNotNull();
+        assertThat(fetchedBook.getTitle()).isEqualTo(updatedBook.getTitle());
+        assertThat(fetchedBook.getAuthor()).isEqualTo(updatedBook.getAuthor());
+        assertThat(fetchedBook.getYear()).isEqualTo(updatedBook.getYear());
+        assertThat(fetchedBook.getIsbn()).isEqualTo(updatedBook.getIsbn());
+    }
+
+    @Test
+    void should_throw_exceptions_when_update_and_id_not_exist() {
+        Book updatedBook = buildBook();
+        HttpEntity<Book> requestEntity = new HttpEntity<>(updatedBook);
+        String url = "/books/" + updatedBook.getId();
+        ResponseEntity<Book> responseEntity = restTemplate.exchange(url, HttpMethod.PUT, requestEntity, Book.class);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
         assertThat(responseEntity.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON);
     }

@@ -131,8 +131,8 @@ class BookControllerTest {
         final Book book = buildBook();
         bookRepository.save(book);
         String url = "/books/" + book.getId();
-        ResponseEntity<Void> response = restTemplate.exchange(url, HttpMethod.DELETE, null, Void.class);
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+        ResponseEntity<Long> responseEntity = restTemplate.exchange(url, HttpMethod.DELETE, null, Long.class);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
         assertThat(bookRepository.findById(book.getId())).isEmpty();
     }
 

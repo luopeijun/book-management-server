@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.annotation.Rollback;
 
 import java.util.List;
@@ -13,6 +14,8 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @DataJpaTest
@@ -91,6 +94,22 @@ class BookRepositoryTest {
         assertThat(updatedBook.getAuthor()).isEqualTo("update author");
         assertThat(updatedBook.getYear()).isEqualTo(2000);
         assertThat(updatedBook.getIsbn()).isEqualTo("1111");
+    }
+
+    @Test
+    void should_delete_book_success() {
+        final Book book = buildBook();
+        bookRepository.save(book);
+        bookRepository.deleteById(book.getId());
+        assertThat(bookRepository.findById(book.getId())).isEmpty();
+    }
+
+    @Test
+    void should_delete_book_when_id_not_exist() {
+        Long nonExistingBookId = 123L;
+        assertThrows(EmptyResultDataAccessException.class, () -> {
+            bookRepository.deleteById(nonExistingBookId);
+        });
     }
 
     private static Book buildBook() {

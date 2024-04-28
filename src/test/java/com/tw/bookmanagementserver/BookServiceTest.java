@@ -13,6 +13,7 @@ import java.util.Optional;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
@@ -95,6 +96,13 @@ class BookServiceTest {
         assertThat(updatedBook.getAuthor()).isEqualTo(updatedBook.getAuthor());
         assertThat(updatedBook.getYear()).isEqualTo(updatedBook.getYear());
         assertThat(updatedBook.getIsbn()).isEqualTo(updatedBook.getIsbn());
+    }
+
+    @Test
+    void should_delete_book() {
+        final Book book = buildBook();
+        bookService.deleteBook(book.getId());
+        verify(bookRepository, times(1)).deleteById(book.getId());
     }
 
     private static Book buildBook() {
